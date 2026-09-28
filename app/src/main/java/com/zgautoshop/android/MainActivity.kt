@@ -134,7 +134,6 @@ class MainActivity : AppCompatActivity(), SerialInputOutputManager.Listener {
         ioManager?.stop(); ioManager = null
         try { port?.close() } catch (_: Exception) {}
         unregisterReceiver(usbReceiver)
-        executor.shutdownNow()
         super.onDestroy()
     }
 }
