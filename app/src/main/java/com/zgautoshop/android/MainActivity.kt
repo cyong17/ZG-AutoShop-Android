@@ -14,15 +14,12 @@ import com.hoho.android.usbserial.driver.UsbSerialPort
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import com.hoho.android.usbserial.util.SerialInputOutputManager
 import java.util.Locale
-import java.util.concurrent.Executors
-
 class MainActivity : AppCompatActivity(), SerialInputOutputManager.Listener {
     companion object { private const val ACTION_USB_PERMISSION = "com.zgautoshop.android.USB_PERMISSION" }
 
     private lateinit var usbManager: UsbManager
     private var port: UsbSerialPort? = null
     private var ioManager: SerialInputOutputManager? = null
-    private val executor = Executors.newSingleThreadExecutor()
     private lateinit var bikeSpinner: Spinner
     private lateinit var deviceSpinner: Spinner
     private lateinit var status: TextView
@@ -103,7 +100,7 @@ class MainActivity : AppCompatActivity(), SerialInputOutputManager.Listener {
             status.setTextColor(0xFF00FF66.toInt())
             log("Opened ${device.deviceName} at 10400 8N1")
             log("WARNING: USB serial is not the K-Line electrical interface. Use a proper K-Line transceiver.")
-            ioManager = SerialInputOutputManager(port, this).also { executor.submit(it) }
+            ioManager = SerialInputOutputManager(port!!, this).also { it.start() }
             sendHondaWakeup()
         } catch (e: Exception) { log("Connect error: ${e.message}") }
     }
